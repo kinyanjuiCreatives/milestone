@@ -27,9 +27,16 @@ LOGGING = {
             'class': 'logging.StreamHandler',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'gunicorn': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
     },
 }
 
