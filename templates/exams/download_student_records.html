@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Download Student Records - Exam Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2 class="mb-4">
+            <i class="fas fa-download text-success me-2"></i>
+            Download Student Records by Course
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-file-word me-2"></i>
+                    Export Student Records
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Format:</strong> This will download a Word document with student records organized by course. 
+                    The file will include student names, registration numbers, and marks for each unit (CAT 1, CAT 2, END TERM). 
+                    Missing marks will be left blank.
+                </div>
+                
+                <form method="get" action="{% url 'exams:download_student_records_by_course' %}">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="course" class="form-label">Course *</label>
+                            <select name="course" id="course" class="form-control" required>
+                                <option value="">Select a Course</option>
+                                {% for course in courses %}
+                                    <option value="{{ course.id }}">{{ course.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="year" class="form-label">Year (Optional)</label>
+                            <select name="year" id="year" class="form-control">
+                                <option value="">All Years</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="term" class="form-label">Term (Optional)</label>
+                            <select name="term" id="term" class="form-control">
+                                <option value="">All Terms</option>
+                                <option value="Term 1">Term 1</option>
+                                <option value="Term 2">Term 2</option>
+                                <option value="Term 3">Term 3</option>
+                                <option value="Term 4">Term 4</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-download me-2"></i>
+                                Download Word Document
+                            </button>
+                            <a href="{% url 'exams:view_records' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Back to Records
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-question-circle me-2"></i>
+                    Instructions
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check text-success me-2"></i>Select a course to download student records for that specific course</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Optionally filter by year and term to get records for a specific period</li>
+                    <li><i class="fas fa-check text-success me-2"></i>If no year/term is selected, the most recent records will be included</li>
+                    <li><i class="fas fa-check text-success me-2"></i>The Word document will include all students in the selected course</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Missing marks will appear as blank cells in the document</li>
+                    <li><i class="fas fa-check text-success me-2"></i>The file can be opened in Microsoft Word, Google Docs, or any word processor</li>
+                    <li><i class="fas fa-check text-success me-2"></i>The document includes a professional header and formatted table</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
