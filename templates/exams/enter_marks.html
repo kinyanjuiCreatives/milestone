@@ -383,45 +383,69 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Load Students Button
     document.getElementById('loadStudentsBtn').addEventListener('click', function() {
-        const courseSelect = document.getElementById('course');
-        const newCourseInput = document.getElementById('new_course');
-        const unitSelect = document.getElementById('unit');
-        const newUnitInput = document.getElementById('new_unit');
-        const school = document.getElementById('school').value;
-        const term = document.getElementById('term').value;
-        const level = document.getElementById('level').value;
-        const year = document.getElementById('year').value;
-        
-        // Determine course value
-        let courseValue = courseSelect.value;
-        if (!courseValue && newCourseInput.value.trim()) {
-            courseValue = newCourseInput.value.trim();
+        console.log('Load Students button clicked');
+        try {
+            const courseSelect = document.getElementById('course');
+            const newCourseInput = document.getElementById('new_course');
+            const unitSelect = document.getElementById('unit');
+            const newUnitInput = document.getElementById('new_unit');
+            const school = document.getElementById('school').value;
+            const term = document.getElementById('term').value;
+            const level = document.getElementById('level').value;
+            const year = document.getElementById('year').value;
+            
+            // Determine course value
+            let courseValue = courseSelect.value;
+            if (!courseValue && newCourseInput.value.trim()) {
+                courseValue = newCourseInput.value.trim();
+            }
+            
+            // Determine unit value
+            let unitValue = unitSelect.value;
+            if (!unitValue && newUnitInput.value.trim()) {
+                unitValue = newUnitInput.value.trim();
+            }
+            
+            // Validate all required fields
+            const missingFields = [];
+            if (!courseValue) missingFields.push('Course');
+            if (!school) missingFields.push('School');
+            if (!unitValue) missingFields.push('Unit');
+            if (!term) missingFields.push('Term');
+            if (!level) missingFields.push('Level');
+            if (!year) missingFields.push('Year');
+            
+            if (missingFields.length > 0) {
+                alert(`Please fill in these required fields: ${missingFields.join(', ')}`);
+                return;
+            }
+            
+            console.log('All fields valid:', JSON.stringify({
+                course: courseValue, 
+                school: school, 
+                unit: unitValue, 
+                term: term, 
+                level: level, 
+                year: year
+            }, null, 2));
+            
+            // Copy values to hidden fields
+            document.getElementById('course_hidden').value = courseValue;
+            document.getElementById('school_hidden').value = school;
+            document.getElementById('unit_hidden').value = unitValue;
+            document.getElementById('term_hidden').value = term;
+            document.getElementById('level_hidden').value = level;
+            document.getElementById('year_hidden').value = year;
+            
+            // Load students for the selected course
+            loadStudentsForCourse(courseValue);
+            
+            // Show the table section
+            document.getElementById('studentsTableSection').style.display = 'block';
+        } catch (error) {
+            console.error('Error loading students:', error);
+            alert('Failed to load students. Please check console for details.');
         }
-        
-        // Determine unit value
-        let unitValue = unitSelect.value;
-        if (!unitValue && newUnitInput.value.trim()) {
-            unitValue = newUnitInput.value.trim();
-        }
-        
-        if (!courseValue || !school || !unitValue || !term || !level || !year) {
-            alert('Please fill in all configuration fields first.');
-            return;
-        }
-        
-        // Copy values to hidden fields
-        document.getElementById('course_hidden').value = courseValue;
-        document.getElementById('school_hidden').value = school;
-        document.getElementById('unit_hidden').value = unitValue;
-        document.getElementById('term_hidden').value = term;
-        document.getElementById('level_hidden').value = level;
-        document.getElementById('year_hidden').value = year;
-        
-        // Load students for the selected course
-        loadStudentsForCourse(courseValue);
-        
-        // Show the table section
-        document.getElementById('studentsTableSection').style.display = 'block';
     });
     
     // Form validation before submission
@@ -489,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function() {
             year: yearValue
         });
         
-        fetch(`/get-existing-marks/?${params}`)
+            fetch('/exams/get-existing-marks/?' + params)
             .then(response => response.json())
             .then(data => {
                 if (data.error) {

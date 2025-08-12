@@ -252,6 +252,18 @@ def enter_marks(request):
                     'has_record': True,
                 })
         available_units = [u for u in all_units if u.id not in entered_units]
+    # Prepare students data grouped by course
+    students_by_course = {}
+    for student in students.select_related('course'):
+        course_id = str(student.course.id)  # Ensure key is string for JSON
+        if course_id not in students_by_course:
+            students_by_course[course_id] = []
+        students_by_course[course_id].append({
+            'id': str(student.id),  # Ensure ID is string
+            'name': student.name,
+            'registration_number': student.registration_number
+        })
+
     context = {
         'students': students,
         'courses': courses,
@@ -266,6 +278,7 @@ def enter_marks(request):
         'unit_marks': unit_marks,
         'available_units': available_units,
         'message': message,
+        'students_data_json': json.dumps(students_by_course),
         'current_campus': current_campus,
     }
     return render(request, 'exams/enter_marks.html', context)
