@@ -164,6 +164,7 @@ def enter_marks(request):
             return redirect('exams:campus_select')
     years = [2025, 2024, 2023, 2022, 2021]
     terms = ['Term 1', 'Term 2', 'Term 3', 'Term 4']
+    levels = ['Level 1', 'Level 2', 'Level 3', 'Level 4', 'Level 5', 'Level 6', 'Level 7', 'Level 8']
     selected_student = None
     selected_year = None
     selected_term = None
@@ -258,6 +259,7 @@ def enter_marks(request):
         'schools': schools,
         'years': years,
         'terms': terms,
+        'levels': levels,
         'selected_student': selected_student,
         'selected_year': selected_year,
         'selected_term': selected_term,
