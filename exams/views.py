@@ -252,6 +252,19 @@ def enter_marks(request):
                     'has_record': True,
                 })
         available_units = [u for u in all_units if u.id not in entered_units]
+    # Prepare students data for JavaScript
+    students_data = {}
+    for course in courses:
+        course_students = Student.objects.filter(course=course)
+        students_data[course.id] = [
+            {
+                'id': s.id,
+                'name': s.name,
+                'registration_number': s.registration_number,
+                'course_name': course.name
+            } for s in course_students
+        ]
+
     context = {
         'students': students,
         'courses': courses,
@@ -267,6 +280,7 @@ def enter_marks(request):
         'available_units': available_units,
         'message': message,
         'current_campus': current_campus,
+        'students_data_json': json.dumps(students_data),
     }
     return render(request, 'exams/enter_marks.html', context)
 
